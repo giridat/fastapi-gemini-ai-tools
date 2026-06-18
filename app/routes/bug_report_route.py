@@ -21,7 +21,6 @@ router = APIRouter(
 )
 
 
-@router.post("/")
 def generate_bug_report(
     request: BugReportRequest
 ):

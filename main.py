@@ -11,6 +11,10 @@ from app.routes.jira_ticket_route import (
     router as jira_ticket_router
 )
 
+from app.routes.agentic_bug_route import (
+    router as agentic_bug_router
+)
+
 app = FastAPI(
     title="AI Career Assistance"
 )
@@ -26,6 +30,10 @@ app.include_router(
 app.include_router(
     jira_ticket_router
 
+)
+
+app.include_router(
+    agentic_bug_router
 )
 
 
