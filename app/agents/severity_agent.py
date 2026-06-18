@@ -1,4 +1,6 @@
 from app.core.gemini_client import client
+from app.core.langchain_llm import googleLLM
+from app.prompt_templates.severity_prompt_template import (severity_prompt)
 import json
 
 
@@ -11,35 +13,12 @@ class SeverityAgent:
         issue_type: str
     ):
 
-        prompt = f""" 
-        Determine severity.
+        prompt = severity_prompt.format(issue=issue,module=module,issue_type=issue_type)
 
-        Issue:
-        {issue}
-
-        Module:
-        {module}
-
-        Issue Type:
-        {issue_type}
-
-        Return JSON:
-
-        {{
-            "severity":"",
-            "priority":""
-        }}
-        
-        
-        """
-
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
-        )
+        response = googleLLM.invoke(prompt)
 
         cleaned = (
-            response.text.replace("```json", "").replace("```", "").strip()
+            response.content.replace("```json", "").replace("```", "").strip()
         )
         return json.loads(cleaned)
 

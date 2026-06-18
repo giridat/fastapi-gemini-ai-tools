@@ -1,5 +1,5 @@
 from app.agents.classifier_agent import (
-    classifer_agent
+    classifier_agent
 )
 
 from app.agents.severity_agent import (
@@ -10,6 +10,9 @@ from app.agents.jira_agent import (
     jira_agent
 )
 
+from app.agents.planner_agent import (planner_agent)
+from typing import Any
+
 
 class BugWorkflow:
 
@@ -17,41 +20,60 @@ class BugWorkflow:
 
         try:
 
-            classification = (
-                classifer_agent.run(issue)
+            plan = planner_agent.run(
+                issue
             )
 
         except Exception as e:
-            return {
-                "error": str(e)
-            }
 
-        try:
-            severity = severity_agent.run(
-                issue,
-                classification["module"],
-                classification["issue_type"]
-            )
-        except Exception as e:
             return {
+                "issue": issue,
+                "plan": None,
+                "classification": None,
+                "severity": None,
+                "jira_ticket": None,
                 "error": str(e)
             }
-        try:
-            jira = (
-                jira_agent.run(issue,
-                               severity["severity"]
-                               )
-            )
-        except Exception as e:
-            return {
-                "error": str(e)
-            }
+        if plan["run_classification"]:
+            try:
+                state["classification"] = (
+                    classifier_agent.run(issue)
+                )
 
-        return {
-            "classification": classification,
-            "severity": severity,
-            "jira_ticket": jira
-        }
+            except Exception as e:
+
+                state["error"] = str(e)
+
+                return state
+        if (plan["run_severity"] and state["classification"]):
+            try:
+                state["severity"] = (severity_agent.run(
+                    issue,
+                    state["classification"]["module"],
+                    state["classification"]["issue_type"]
+                ))
+            except Exception as e:
+
+                state["error"] = str(e)
+
+                return state
+        if (plan["run_jira"] and state["severity"]):
+
+            try:
+                state["jira_ticket"] = (
+                    jira_agent.run(
+                        issue,
+                        state["severity"]["severity"]
+                    )
+                )
+
+            except Exception as e:
+
+                state["error"] = str(e)
+
+                return state
+
+        return state
 
 
 bug_workflow = BugWorkflow()

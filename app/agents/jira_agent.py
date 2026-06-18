@@ -1,4 +1,6 @@
 from app.core.gemini_client import client
+from app.core.langchain_llm import googleLLM
+from app.prompt_templates.jira_prompt_template import (jira_prompt)
 import json
 
 
@@ -6,32 +8,11 @@ class JiraAgent:
 
     def run(self, issue: str, severity: str):
 
-        prompt = f"""
-        Create Jira Ticket.
-
-        Issue:
-        {issue}
-
-        Severity:
-        {severity}
-
-        Return JSON:
-
-        {{
-            "title":"",
-            "description":"",
-            "labels":[]
-        }}
-        
-         """
-
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
-        )
+        prompt = jira_prompt.format(issue=issue, severity=severity)
+        response = googleLLM.invoke(prompt)
 
         cleanedResponse = (
-            response.text.replace("```json", "").replace("```", "").strip()
+            response.content.replace("```json", "").replace("```", "").strip()
         )
 
         return json.loads(cleanedResponse)
