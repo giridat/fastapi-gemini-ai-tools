@@ -19,18 +19,18 @@ app = FastAPI(
     title="AI Career Assistance"
 )
 
-# app.include_router(
-#     flutter_review_router
-# )
+app.include_router(
+    flutter_review_router
+)
 
-# app.include_router(
-#     bug_report_router
-# )
+app.include_router(
+    bug_report_router
+)
 
-# app.include_router(
-#     jira_ticket_router
+app.include_router(
+    jira_ticket_router
 
-# )
+)
 
 app.include_router(
     agentic_bug_router
