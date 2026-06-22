@@ -2,7 +2,21 @@
 
 AI QA Copilot is an AI-powered bug analysis and workflow automation platform designed to streamline software quality assurance processes. The application leverages Large Language Models (LLMs), workflow orchestration, and Retrieval-Augmented Generation (RAG) principles to assist engineering teams in bug triaging, classification, severity assessment, and knowledge retrieval.
 
-## Features
+## Features 
+
+Current Features
+- Planner Workflow
+- Classification
+- Severity Analysis
+- Jira Generation
+
+Upcoming Features
+- RAG
+- ChromaDB
+- Historical Bug Retrieval
+- Root Cause Analysis
+- Test Case Generation
+- Docker Deployment
 
 ### Current Features
 
