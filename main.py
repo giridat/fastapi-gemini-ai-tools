@@ -15,9 +15,12 @@ from app.routes.agentic_bug_route import (
     router as agentic_bug_router
 )
 
+from app.routes.bug_route import router as bug_router
+
 app = FastAPI(
     title="AI Career Assistance"
 )
+
 
 app.include_router(
     flutter_review_router
@@ -32,8 +35,12 @@ app.include_router(
 
 )
 
+
 app.include_router(
     agentic_bug_router
+)
+app.include_router(
+    bug_router
 )
 
 

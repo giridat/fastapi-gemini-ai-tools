@@ -10,6 +10,7 @@ from app.agents.jira_agent import (
     jira_agent
 )
 
+from app.rag.retrieval_service import (retrieval_service)
 from app.agents.planner_agent import (planner_agent)
 from typing import Any
 
@@ -24,6 +25,26 @@ class BugWorkflow:
                 issue
             )
 
+            state = {
+                "issue": issue,
+                "plan": plan,
+                "similar_bugs": [],
+                "classification": None,
+                "severity": None,
+                "jira_ticket": None,
+                "error": None
+            }
+            try:
+
+                retrieved_bugs = (
+                    retrieval_service.search(issue)
+                )
+                state["similar_bugs"] = retrieved_bugs
+
+            except Exception as e:
+                state["error"] = str(e)
+                return state
+
         except Exception as e:
 
             return {
@@ -34,7 +55,7 @@ class BugWorkflow:
                 "jira_ticket": None,
                 "error": str(e)
             }
-        if plan["run_classification"]:
+        if plan.get["run_classification"]:
             try:
                 state["classification"] = (
                     classifier_agent.run(issue)
@@ -45,7 +66,7 @@ class BugWorkflow:
                 state["error"] = str(e)
 
                 return state
-        if (plan["run_severity"] and state["classification"]):
+        if (plan.get["run_severity"] and state["classification"]):
             try:
                 state["severity"] = (severity_agent.run(
                     issue,
@@ -57,7 +78,7 @@ class BugWorkflow:
                 state["error"] = str(e)
 
                 return state
-        if (plan["run_jira"] and state["severity"]):
+        if (plan.get["run_jira"] and state["severity"]):
 
             try:
                 state["jira_ticket"] = (

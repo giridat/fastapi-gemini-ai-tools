@@ -1,5 +1,15 @@
-venv/
+# SQLite
+*.db
+
+# Python
 __pycache__/
 *.pyc
+
+# Virtual Env
+venv/
+
+# Environment Variables
 .env
-.vscode/
+
+# ChromaDB (later)
+chroma_db/
