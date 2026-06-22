@@ -6,7 +6,21 @@ The project demonstrates how Large Language Models can be orchestrated through s
 
 ---
 
-## Features
+## Features 
+
+Current Features
+- Planner Workflow
+- Classification
+- Severity Analysis
+- Jira Generation
+
+Upcoming Features
+- RAG
+- ChromaDB
+- Historical Bug Retrieval
+- Root Cause Analysis
+- Test Case Generation
+- Docker Deployment
 
 ### Flutter Code Review API
 
